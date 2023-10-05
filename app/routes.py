@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from app import app
-import os
+import os , json
 
 # ... (โค้ดที่มีอยู่)
 
@@ -33,6 +33,10 @@ def search_text():
 def add_text():
     return render_template("add_text.html")
 
+@app.route("/note_check", methods=["GET"])
+def note_check():
+    return render_template("note_check.html")
+
 @app.route("/add_to_data", methods=["POST"])
 def add_to_data():
     new_text = request.form.get('new_text', '')
@@ -44,6 +48,23 @@ def add_to_data():
 
     # Redirect to the home page to display the updated content
     return redirect(url_for('index'))
+
+data = []  # นิยามตัวแปร data ใน global scope
+
+@app.route('/save_note', methods=['POST'])
+def save_note():
+    global data  # อ้างถึงตัวแปร data ใน global scope
+    note_data = request.get_json()
+    data.append(note_data)
+    save_to_json()
+    return 'Note saved successfully.'
+
+# ฟังก์ชันบันทึกข้อมูลลงในไฟล์ JSON
+def save_to_json():
+    global data
+    with open('note.json', 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False)
+
 
 @app.errorhandler(404)
 def page_not_found(error):

@@ -5,14 +5,15 @@
 {% endblock %}
 
 {% block content %}
-<div class="card text-center">
+<div class="card text-center mt-5"> <!-- Added margin-top -->
     <div class="card-header">
         เพิ่มข้อความ
     </div>
     <div class="card-body">
         <form action="/add_to_data" method="post">
             <div class="form-group">
-                <textarea class="form-control" id="new_text" name="new_text" rows="3" required></textarea>
+                <!-- Adjusted the rows to make the textarea larger -->
+                <textarea class="form-control" id="new_text" name="new_text" rows="10" required></textarea>
             </div>
             <button type="submit" class="btn btn-outline-success">เพิ่มคำ</button>
         </form>
