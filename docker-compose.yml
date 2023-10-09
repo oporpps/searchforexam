@@ -3,7 +3,8 @@ version: '3.9'
 services:
     searchforexam:
         container_name: searchforexam
-        image: .
+        build: .
         ports:
             - "8080:5000"
+        restart: always
         
