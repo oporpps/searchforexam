@@ -9,4 +9,4 @@ RUN pip install -r requirement.txt
 
 EXPOSE 5000
 
-CMD [ "python", "server.py" ]
+CMD ["python", "server.py"]

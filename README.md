@@ -4,11 +4,11 @@ Setup for ubuntu server, You can create server on windows with docker compose
 apt update && apt upgrade && apt install git
 ```
 ```shell
-chmod +x docker.sh && chmod +x build.sh
+chmod +x docker.sh && chmod +x deploy.sh
 ```
 ```shell
 ./docker.sh
 ```
 ```shell
-./build.sh
+./deploy.sh
 ```
