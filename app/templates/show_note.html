@@ -1,0 +1,36 @@
+{% extends 'layout/default.html' %}
+
+{% block title %}
+    เพิ่มโน้ต
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="padding-top: 130px;">
+
+        <div class="card p-4">
+
+            <table class="table table-striped">
+                <thead class="text-center">
+                    <tr>
+                        <th scope="col">โจทย์</th>
+                        <th scope="col">ข้อที่</th>
+                        <th scope="col">คำตอบ</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for ss in data.data %}
+                        <tr>
+                            <td>{{ ss.title }}</td>
+                            <th scope="row">{{ ss.choice }}</th>
+                            <td>{{ ss.answer }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        
+    </div>
+
+
+{% endblock %}

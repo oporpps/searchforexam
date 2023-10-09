@@ -5,20 +5,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="card text-center mt-5"> <!-- Added margin-top -->
-    <div class="card-header">
-        เพิ่มข้อความ
-    </div>
-    <div class="card-body">
-        <form action="/add_to_data" method="post">
-            <div class="form-group">
-                <!-- Adjusted the rows to make the textarea larger -->
-                <textarea class="form-control" id="new_text" name="new_text" rows="10" required></textarea>
+
+    <div class="container" style="padding-top: 130px;">
+        <div class="card text-center">
+            <div class="card-header">
+                เพิ่มข้อความ
             </div>
-            <button type="submit" class="btn btn-outline-success">เพิ่มคำ</button>
-        </form>
+            <div class="card-body">
+                <form action="/add_text" method="post">
+                    <div class="form-group">
+                        <!-- Adjusted the rows to make the textarea larger -->
+                        <textarea class="form-control" id="new_text" name="new_text" rows="10" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">เพิ่มคำ</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="card-footer text-body-secondary">
-    </div>
-</div>
+
 {% endblock %}

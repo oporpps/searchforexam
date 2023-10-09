@@ -1,0 +1,31 @@
+{% extends 'layout/default.html' %}
+
+{% block title %}
+    เพิ่มโน้ต
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="padding-top: 130px;">
+
+        <div class="card p-4">
+
+            <form action="/add_note" method="post">
+                <div class="mb-3">
+                    <label class="form-label">โจทย์</label>
+                    <textarea name="title" class="form-control" rows="2" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ข้อที่</label>
+                    <input name="choice" type="number" class="form-control" min="0" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">คำตอบ</label>
+                    <textarea name="answer" class="form-control" rows="2" required></textarea>
+                </div>
+                <button class="btn btn-lg btn-success w-100">SUBMIT</button>
+            </form>
+
+        </div>
+        
+    </div>
+{% endblock %}
