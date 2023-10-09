@@ -1,13 +1,14 @@
-from flask import render_template, request, redirect, url_for
+from flask import jsonify, render_template, request, redirect, url_for
 from app import app
 import os , json
 
-# ... (โค้ดที่มีอยู่)
+NOTE_JSON_DIRECTORY = "notes_data"
+NOTE_JSON_FILE_PATH = os.path.join(os.getcwd(), NOTE_JSON_DIRECTORY, 'note.json')
 
 @app.route("/", methods=["GET"])
 def index():
     file_path = os.path.join(os.getcwd(), 'data.txt')
-    
+    print(os.getcwd())
     # อ่านข้อมูลจากไฟล์ data.txt และนำมาแสดง
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -37,6 +38,19 @@ def add_text():
 def note_check():
     return render_template("note_check.html")
 
+@app.route("/test", methods=["GET"])
+def test():
+    global NOTE_JSON_FILE_PATH
+
+    # Check if the file exists and is not empty
+    if os.path.exists(NOTE_JSON_FILE_PATH) and os.path.getsize(NOTE_JSON_FILE_PATH) > 0:
+        with open(NOTE_JSON_FILE_PATH, 'r', encoding="utf-8") as f:
+            x = json.load(f)
+    else:
+        x = {}  # Provide a default empty JSON object
+
+    return render_template("test.html", contentx=x)
+
 @app.route("/add_to_data", methods=["POST"])
 def add_to_data():
     new_text = request.form.get('new_text', '')
@@ -44,26 +58,40 @@ def add_to_data():
     # Append the new text to the data.txt file
     file_path = os.path.join(os.getcwd(), 'data.txt')
     with open(file_path, 'a', encoding='utf-8') as file:
-        file.write('\n' + new_text)
+        file.write(new_text + '\n')
 
     # Redirect to the home page to display the updated content
     return redirect(url_for('index'))
 
 data = []  # นิยามตัวแปร data ใน global scope
 
-@app.route('/save_note', methods=['POST'])
+app.route('/save_note', methods=['POST'])
 def save_note():
-    global data  # อ้างถึงตัวแปร data ใน global scope
+    global data
+
+    # Get note data from the request
     note_data = request.get_json()
+    print(note_data)  # Print for debugging
+
+    # Append note data to the global data list
     data.append(note_data)
+
+    # Save data to note.json
     save_to_json()
+
     return 'Note saved successfully.'
 
 # ฟังก์ชันบันทึกข้อมูลลงในไฟล์ JSON
 def save_to_json():
     global data
-    with open('note.json', 'w', encoding='utf-8') as file:
+    global NOTE_JSON_FILE_PATH
+
+    # Create the directory if it doesn't exist
+    os.makedirs(os.path.dirname(NOTE_JSON_FILE_PATH), exist_ok=True)
+
+    with open(NOTE_JSON_FILE_PATH, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False)
+
 
 
 @app.errorhandler(404)

@@ -1,7 +1,7 @@
 {% extends 'layout/default.html' %}
 
 {% block title %}
-    โน้ตที่ทำแล้ว
+    เพิ่มโน้ต
 {% endblock %}
 
 {% block content %}
@@ -28,23 +28,9 @@
         <div class="table-container">
             <table class="table table-bordered" id="table1">
                 <thead>
-                    <tr>
-                        <th>หัวข้อ</th>
-                        <th>ข้อ</th>
-                        <th>คำตอบ</th>
-                        <th>ดำเนินการ</th>
-                    </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><textarea id="noteData1"></textarea></td>
-                        <td><textarea id="noteData2"></textarea></td>
-                        <td><textarea id="noteData3"></textarea></td>
-                        <td>
-                            <button onclick="saveChanges()" class="btn btn-success">บันทึก</button>
-                            <button onclick="deleteTable('table1')" class="btn btn-danger">ลบตาราง</button>
-                        </td>
-                    </tr>
+                    
                 </tbody>
             </table>
         </div>
@@ -55,7 +41,7 @@
     </div>
 
     <script>
-        let tableCounter = 1;
+        let tableCounter = 0;
 
         function create_table() {
             const tableNumber = tableCounter++;
@@ -102,39 +88,45 @@
             const noteData1 = document.getElementById(`noteData1_${tableId}`).value;
             const noteData2 = document.getElementById(`noteData2_${tableId}`).value;
             const noteData3 = document.getElementById(`noteData3_${tableId}`).value;
-        
+    
             const noteData = {
                 'หัวข้อ': noteData1,
                 'ข้อ': noteData2,
                 'คำตอบ': noteData3
             };
-        
-            fetch('/save_note', {
+    
+            console.log('NoteData:', noteData);  // แสดงข้อมูลที่จะถูกส่งไปบันทึก
+    
+            fetch('/add_to_data', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json; charset=utf-8' // ระบุ charset ให้เป็น UTF-8
+                    'Content-Type': 'application/json; charset=utf-8'
                 },
                 body: JSON.stringify(noteData)
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                console.log('Response:', data);
+                if (data.success) {
+                    console.log('Note saved successfully:', data);
+                    alert('บันทึกข้อมูลลง note.json สำเร็จ!');  // แสดงการแจ้งเตือนเมื่อบันทึกสำเร็จ
+                } else {
+                    console.error('Failed to save note:', data.message);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
-        function deleteData(tableId) {
-            fetch(`/delete_data/${tableId}`, {
-                method: 'DELETE'
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log('Data deleted:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    
+        function deleteTable(tableId) {
+            const confirmation = confirm('คุณต้องการลบตารางนี้ใช่หรือไม่?'); // แสดงข้อความยืนยันการลบ
+    
+            if (confirmation) {
+                const table = document.getElementById(tableId);
+                table.closest('.table-container').remove();
+                alert('ลบตารางเรียบร้อยแล้ว!'); // แสดงการแจ้งเตือนเมื่อลบตารางสำเร็จ
+            }
         }
+
     </script>
 {% endblock %}
